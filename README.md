@@ -12,11 +12,10 @@ The titlekeys have to be stored in a .csv file with the following entries:
 ```
 rightsID,applicationID,ContentVersion,EncryptedKey,DecryptedKey,Verified
 ```
-nca2nsp only needs the 2nd and 4th column filled, so an entry like
+nca2nsp only needs the 2nd and 4th column filled, so an entry like the following is fine.
 ```
 ,xxxxxxxxxxxxxxxx,xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx,,
 ```
-is fine.
 
 # Usage
 Once all is set up, create a folder and copy all ncas belonging to a title into it. Then run
