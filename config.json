@@ -1,0 +1,9 @@
+{
+"Paths": {
+    "hactoolPath":  ".\\resources\\hactool.exe",
+    "keysPath":     ".\\resources\\keys.txt",
+    "titlekeydb":   ".\\resources\\titlekeys.csv",
+    "certificate":  ".\\resources\\Certificate.cert",
+    "ticket":       ".\\resources\\Ticket.tik" 
+    }
+}
