@@ -2,6 +2,9 @@
 This Python script will convert a folder of nca files to an installable nsp file.  
 It has also the ability to extract nsp files.
 
+It is provided as an .exe file for easy use.  
+If you want to use the script directly, you probably know how to.
+
 ## First Run & Configuration
 * copy hactool to resources dir
 * copy your keys file created by lockpick_rcm (needed by hactool) to resources dir
@@ -21,12 +24,12 @@ The resources directory needs to be in the same folder as the program file.
 ## pack ncas to nsp
 Create a folder and copy all ncas belonging to a title into it. Then run
 ```
-nca2nsp.py <path_to_nca_folder>
+nca2nsp.exe <path_to_nca_folder>
 ```
 The nsp will by default be created in the cwd.
 
 ## unpack nsp
 ```
-nca2nsp.py <path_to_nsp_file>
+nca2nsp.exe <path_to_nsp_file>
 ```
-The contents of the nsp file will be extracted to subfolder with the name of the nsp
+The contents of the nsp file will be extracted to a subfolder with the name of the nsp
