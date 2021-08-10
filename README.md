@@ -1,6 +1,6 @@
 # nca2nsp
-This Python script will convert a folder of nca files to an installable nsp file.
-It has also the ability to extrat nsp files.
+This Python script will convert a folder of nca files to an installable nsp file.  
+It has also the ability to extract nsp files.
 
 ## First Run & Configuration
 * copy hactool to resources dir
