@@ -17,7 +17,7 @@ nca2nsp only needs the 2nd and 4th column filled, so an entry like the following
 Optionally edit the config.json file and enter the path to the resources.
 The resources directory needs to be in the same folder as the program file.
 
-# Usage
+# Basic Usage
 ## pack ncas to nsp
 Create a folder and copy all ncas belonging to a title into it. Then run
 ```
