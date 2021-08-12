@@ -32,6 +32,40 @@ def load_config(fPath):
     return hactoolPath, keysPath, tkeydb, cert, tik
 
 
+def expandcsv(expath):
+    data = gatherinfo(expath)
+    if type(data) == int:
+        return data
+    with open(tkeydb, 'a+', newline='') as f:
+        csv_writer = csv.writer(f)
+        csv_writer.writerow(data)
+    print('Added')
+    print(data)
+    print('to', tkeydb)
+
+
+def gatherinfo(exdir):
+    filelist = [f for f in os.listdir(exdir) if os.path.isfile(os.path.join(exdir, f))]
+    ticket = [t for t in filelist if t.endswith('.tik')]
+    cnmt = [t for t in filelist if t.endswith('.cnmt.xml')]
+    if len(ticket) == 1 and len(cnmt) == 1:
+        with open(os.path.join(exdir, ticket[0]), 'rb') as file:
+            file.seek(0x180)
+            tkey = file.read(16)
+            file.seek(0x2A0, 0)
+            rid = file.read(16)
+        xmltree = etree.parse(os.path.join(exdir, cnmt[0]))
+        root = xmltree.getroot()  # contentmeta
+        version = root.find('Version').text
+        return [rid.hex().upper(), rid[:8].hex().upper(), version, tkey.hex().upper(), '', 'True']
+            
+    else:
+        print('There should exist exactly one .tik and one .cnmt.xml file.')
+        print(ticket)
+        print(cnmt)
+        return 1      
+        
+
 def extract_nsp(nspfilename):
     outdir = nspfilename[:-4]
     if not os.path.isfile(nspfilename):
@@ -63,6 +97,7 @@ def extract_nsp(nspfilename):
             with open(os.path.join(outdir, stringtable[n]), 'wb') as f:
                 f.write(filedata)
         print()
+    return outdir
 
 
 def decrypt_NCA(fPath, tkey, outDir=''):
@@ -153,13 +188,18 @@ def main():
     def formatter(prog):
         return argparse.RawTextHelpFormatter(prog, max_help_position=40)
     parser = argparse.ArgumentParser(formatter_class=formatter)
-    parser.set_defaults(delete = False)
+    parser.set_defaults(delete = False, csv = False)
     parser.add_argument('directory', help='The directory containing the ncas.')
     parser.add_argument('-d', '--delete', action='store_true', help='Delete the nca directory after nsp is created.')
+    parser.add_argument('-c', '--csv', action='store_true', help='nspfile: extracting and make entry into the titlekeys csv file\ndirectory: Make csv entry only.')
 
     args = parser.parse_args()
 
     if os.path.isdir(args.directory):
+        if args.csv:
+            expandcsv(args.directory)
+            return 0
+            
         #print(parser.directory, 'is a Directory')
         ncadir = os.path.join(cwd, args.directory)
         ncalist = [f for f in os.listdir(ncadir) if os.path.isfile(
@@ -251,10 +291,15 @@ def main():
     elif os.path.isfile(args.directory) and args.directory.split('.')[-1] == 'nsp':
         #print(args.directory, 'is a nsp file')
         print('\\Extracting', args.directory)
-        extract_nsp(args.directory)
-        
+        expath = extract_nsp(args.directory)
+        if args.csv:
+            expandcsv(expath)
+        return 0
+                
+
     else:
         print("Can't process", game, "\nNo directory or nsp file")
+        return 1
 
 if __name__ == '__main__':
     cwd = os.getcwd()
