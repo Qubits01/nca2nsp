@@ -33,3 +33,8 @@ The nsp will by default be created in the cwd.
 nca2nsp.exe <path_to_nsp_file>
 ```
 The contents of the nsp file will be extracted to a subfolder with the name of the nsp
+
+## add information into .csv file
+The contents of an extracted nsp with ticket and xml files is needed. Add the **-i** Option to your command.
+If it's a folder, only the info will be added to the csv. No nsp file will be created.  
+If it's a nsp file, the nsp will be extracted and then the info will be added the the csv.
