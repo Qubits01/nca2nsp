@@ -5,6 +5,10 @@ It has also the ability to extract nsp files.
 It is provided as an .exe file for easy use.  
 If you want to use the script directly, you probably know how to.
 
+## Disclaimer
+This program is heavily untested and in pre-release state.  
+So please report any issues.
+
 ## First Run & Configuration
 * copy hactool to resources dir
 * copy your keys file created by lockpick_rcm (needed by hactool) to resources dir
