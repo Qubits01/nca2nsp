@@ -2,7 +2,7 @@
 This Python script will convert a folder of nca files to an installable nsp file.  
 It has also the ability to extract nsp files.
 
-It is provided as an .exe file for easy use.  
+It is also provided as an .exe file for easy use without the need of a python install.  
 If you want to use the script directly, you probably know how to.
 
 ## Disclaimer
