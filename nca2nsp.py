@@ -2,6 +2,7 @@
 
 import os
 import sys
+import shlex
 import subprocess
 import json
 import shutil
@@ -14,6 +15,26 @@ import csv
 import nsp
 from struct import pack as pk, unpack as upk
 
+IS_WINDOWS = sys.platform.startswith( 'win' )
+IS_FROZEN  = getattr( sys, 'frozen', False )
+    
+class CustomArgumentParser( argparse.ArgumentParser ):
+    if IS_WINDOWS:
+        # override
+        def parse_args( self ):
+            def rawCommandLine():
+                from ctypes.wintypes import LPWSTR
+                from ctypes import windll
+                Kernel32 = windll.Kernel32
+                GetCommandLineW = Kernel32.GetCommandLineW
+                GetCommandLineW.argtypes = ()
+                GetCommandLineW.restype  = LPWSTR
+                return GetCommandLineW()                            
+            NIX_PATH_SEP = '/'                
+            commandLine = rawCommandLine().replace( os.sep, NIX_PATH_SEP )
+            skipArgCount = 1 if IS_FROZEN else 2
+            args = shlex.split( commandLine )[skipArgCount:]        
+            return argparse.ArgumentParser.parse_args( self, args )
 
 def load_config(fPath):
     try:
@@ -187,14 +208,14 @@ def gettitledata(ncafile, keydb):
 def main():
     def formatter(prog):
         return argparse.RawTextHelpFormatter(prog, max_help_position=40)
-    parser = argparse.ArgumentParser(formatter_class=formatter)
+    parser = CustomArgumentParser(formatter_class=formatter)
     parser.set_defaults(delete = False, csv = False)
     parser.add_argument('directory', help='The directory containing the ncas.')
     parser.add_argument('-d', '--delete', action='store_true', help='Delete the nca directory after nsp is created.')
     parser.add_argument('-c', '--csv', action='store_true', help='nspfile: extracting and make entry into the titlekeys csv file\ndirectory: Make csv entry only.')
 
     args = parser.parse_args()
-
+    print([args.directory],[sys.argv[2]])
     if os.path.isdir(args.directory):
         if args.csv:
             expandcsv(args.directory)
@@ -298,7 +319,7 @@ def main():
                 
 
     else:
-        print("Can't process", game, "\nNo directory or nsp file")
+        print("Can't process", [args.directory], "\nNo directory or nsp file")
         return 1
 
 if __name__ == '__main__':
